@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jayjay Rosas | IT Graduate & Aspiring Cybersecurity Professional</title>
+  <meta name="description" content="Interactive resume and technical portfolio of Jayjay Rosas — BS in Information Technology graduate majoring in Database Systems with experience in Laravel development and foundational cybersecurity.">
+  <meta name="keywords" content="Jayjay Rosas, Information Technology, Resume, Portfolio, Laravel, Database Systems, Cybersecurity, SQL, Linux">
+  <meta name="author" content="Jayjay Rosas">
+
+  <meta property="og:title" content="Jayjay Rosas | IT Graduate & Aspiring Cybersecurity Professional">
+  <meta property="og:description" content="Resume portfolio of Jayjay Rosas — Database Systems, Full-Stack Laravel Development, and Cybersecurity Fundamentals.">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            surface: {
+              main: '#F8FAFC',
+              secondary: '#F1F5F9',
+              card: '#FFFFFF',
+              border: '#E2E8F0',
+              input: '#CBD5E1',
+            },
+            accent: {
+              blue: '#2563EB',
+              blueHover: '#1D4ED8',
+              indigo: '#4F46E5',
+              violet: '#7C3AED',
+              blueBg: '#EFF6FF',
+              indigoBg: '#EEF2FF',
+              violetBg: '#F5F3FF',
+            },
+            typography: {
+              primary: '#0F172A',
+              secondary: '#475569',
+              muted: '#64748B',
+            }
+          },
+          boxShadow: {
+            card: '0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04)',
+            'card-hover': '0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body class="bg-surface-main text-typography-primary font-sans antialiased selection:bg-accent-blue selection:text-white">
+
+  <div data-include="sections/navbar.html"></div>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+    <div data-include="sections/hero.html"></div>
+    <div data-include="sections/about.html"></div>
+    <div data-include="sections/skills.html"></div>
+    <div data-include="sections/projects.html"></div>
+    <div data-include="sections/experience.html"></div>
+    <div data-include="sections/certifications.html"></div>
+    <div data-include="sections/education.html"></div>
+    <div data-include="sections/contact.html"></div>
+  </main>
+
+  <div data-include="sections/footer.html"></div>
+
+  <div data-include="components/project-modal.html"></div>
+  <div data-include="components/certificate-modal.html"></div>
+
+  <script src="assets/js/certificates-data.js"></script>
+  <script src="assets/js/modal.js"></script>
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/modal.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

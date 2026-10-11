@@ -1,0 +1,56 @@
+<div id="certificateViewerModal" class="fixed inset-0 z-50 hidden bg-slate-950/60 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4 md:p-6" role="dialog" aria-modal="true" aria-labelledby="modalCertTitle">
+  <div class="bg-white border border-surface-border rounded-xl w-full max-w-5xl h-[92vh] flex flex-col shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+    
+    <div class="px-4 sm:px-6 py-3 border-b border-surface-border bg-surface-main flex items-center justify-between gap-4">
+      <div class="min-w-0">
+        <h3 id="modalCertTitle" class="text-sm sm:text-base font-bold text-typography-primary truncate">
+          Certificate Title
+        </h3>
+        <p class="text-xs text-typography-secondary flex items-center gap-2 mt-0.5">
+          <span id="modalCertIssuer" class="font-medium text-accent-blue truncate">Issuer</span>
+          <span class="text-surface-border">&bull;</span>
+          <span id="modalCertDate" class="font-mono text-typography-muted">Date</span>
+        </p>
+      </div>
+      <button 
+        type="button" 
+        onclick="closeCertificateModal()" 
+        class="p-2 rounded-lg text-typography-muted hover:text-typography-primary hover:bg-surface-secondary transition-colors" 
+        aria-label="Close certificate viewer"
+      >
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+
+    <div class="flex-1 bg-slate-100 relative overflow-hidden flex items-center justify-center">
+      <object id="modalPdfObject" data="" type="application/pdf" class="w-full h-full bg-white">
+        <iframe id="modalPdfFrame" src="" class="w-full h-full border-0 bg-white" title="Certificate Document Viewer">
+          <div class="p-6 text-center space-y-3">
+            <p class="text-sm text-typography-secondary">
+              Your browser does not support inline PDF previews.
+            </p>
+            <a id="modalFallbackLink" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-4 py-2 rounded-md bg-accent-blue text-white text-xs font-semibold">
+              <i data-lucide="external-link" class="w-4 h-4"></i> Open Document Directly
+            </a>
+          </div>
+        </iframe>
+      </object>
+    </div>
+
+    <div class="px-4 sm:px-6 py-3 border-t border-surface-border bg-white flex flex-wrap items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <a id="modalVerifyBtn" href="#" target="_blank" rel="noopener noreferrer" class="hidden inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-accent-blueBg border border-blue-200 text-xs font-semibold text-accent-blue hover:bg-blue-100 transition-colors">
+          <i data-lucide="shield-check" class="w-4 h-4"></i> Verify Credential
+        </a>
+        <a id="modalExternalBtn" href="#" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-surface-secondary border border-surface-border text-xs font-semibold text-typography-secondary hover:text-typography-primary hover:bg-slate-200 transition-colors">
+          <i data-lucide="external-link" class="w-3.5 h-3.5"></i> Open Full Document
+        </a>
+      </div>
+
+      <button type="button" onclick="closeCertificateModal()" class="px-4 py-1.5 rounded-md bg-surface-secondary border border-surface-border text-xs font-semibold text-typography-secondary hover:text-typography-primary hover:bg-slate-200 transition-colors">
+        Close Viewer
+      </button>
+    </div>
+
+  </div>
+</div>

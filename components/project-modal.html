@@ -1,0 +1,35 @@
+<div id="laundryModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+  <div class="bg-white border border-surface-border rounded-lg max-w-lg w-full p-6 space-y-4 max-h-[85vh] overflow-y-auto shadow-lg">
+    <div class="flex items-center justify-between border-b border-surface-border pb-3">
+      <h3 class="text-base font-bold text-typography-primary">Laundry Management System</h3>
+      <button onclick="closeModal('laundryModal')" class="text-typography-muted hover:text-typography-primary" aria-label="Close modal">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+    <div class="space-y-2.5 text-xs text-typography-secondary leading-relaxed">
+      <p><strong class="text-typography-primary">Architecture:</strong> Developed using the Laravel MVC design pattern, MySQL, and Blade templating. Employs Eloquent ORM to enforce relational constraints between customer profiles, order tiers, and invoices.</p>
+      <p><strong class="text-typography-primary">Security Implementation:</strong> Utilizes CSRF token validation across state-changing forms, Bcrypt hashing for credentials, and input validation rules to mitigate injection risks.</p>
+    </div>
+    <div class="pt-3 border-t border-surface-border flex justify-end">
+      <button onclick="closeModal('laundryModal')" class="px-3 py-1.5 rounded bg-surface-secondary border border-surface-border text-xs font-semibold text-typography-secondary hover:text-typography-primary">Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="taskModal" class="fixed inset-0 z-50 hidden bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+  <div class="bg-white border border-surface-border rounded-lg max-w-lg w-full p-6 space-y-4 max-h-[85vh] overflow-y-auto shadow-lg">
+    <div class="flex items-center justify-between border-b border-surface-border pb-3">
+      <h3 class="text-base font-bold text-typography-primary">Task Management System</h3>
+      <button onclick="closeModal('taskModal')" class="text-typography-muted hover:text-typography-primary" aria-label="Close modal">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+    </div>
+    <div class="space-y-2.5 text-xs text-typography-secondary leading-relaxed">
+      <p><strong class="text-typography-primary">Architecture:</strong> Built using Laravel and MySQL with foreign key cascading to maintain relational integrity across assignments and priority queues.</p>
+      <p><strong class="text-typography-primary">Security Implementation:</strong> Features session-based authentication guards and role policies to guarantee users access only their assigned workspaces.</p>
+    </div>
+    <div class="pt-3 border-t border-surface-border flex justify-end">
+      <button onclick="closeModal('taskModal')" class="px-3 py-1.5 rounded bg-surface-secondary border border-surface-border text-xs font-semibold text-typography-secondary hover:text-typography-primary">Close</button>
+    </div>
+  </div>
+</div>

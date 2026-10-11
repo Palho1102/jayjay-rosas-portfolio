@@ -1,0 +1,76 @@
+<section id="certifications" class="space-y-4">
+  <div class="border-b border-surface-border pb-2 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <h2 class="text-lg font-bold text-typography-primary uppercase tracking-wider text-xs font-mono text-accent-blue">
+        05. Certifications & Verified Training
+      </h2>
+      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono bg-accent-blueBg text-accent-blue border border-blue-200">
+        <span class="w-1.5 h-1.5 rounded-full bg-accent-blue animate-pulse"></span> Auto Marquee
+      </span>
+    </div>
+
+    <div class="flex items-center gap-1.5">
+      <button 
+        type="button"
+        onclick="stepMarquee('left')" 
+        class="p-1.5 rounded-md bg-white border border-surface-border text-typography-secondary hover:text-accent-blue hover:bg-surface-secondary hover:border-blue-300 shadow-xs transition-colors"
+        aria-label="Previous certificates"
+      >
+        <i data-lucide="chevron-left" class="w-4 h-4"></i>
+      </button>
+      <button 
+        type="button"
+        onclick="stepMarquee('right')" 
+        class="p-1.5 rounded-md bg-white border border-surface-border text-typography-secondary hover:text-accent-blue hover:bg-surface-secondary hover:border-blue-300 shadow-xs transition-colors"
+        aria-label="Next certificates"
+      >
+        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </div>
+
+  <div id="cert-detail-panel" class="bg-white border border-surface-border rounded-lg p-5 shadow-card transition-all space-y-3">
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-surface-border pb-3">
+      <div>
+        <div class="flex items-center gap-2">
+          <span id="detailCategory" class="text-[11px] font-mono font-semibold px-2 py-0.5 rounded bg-accent-blueBg text-accent-blue">
+            Cybersecurity
+          </span>
+          <span id="detailDate" class="text-xs font-mono text-typography-muted">
+            July 22, 2026
+          </span>
+        </div>
+        <h3 id="detailTitle" class="text-base sm:text-lg font-bold text-typography-primary mt-1">
+          Foundations of Cybersecurity
+        </h3>
+        <p id="detailIssuer" class="text-xs font-medium text-accent-blue">
+          Google / Coursera
+        </p>
+      </div>
+
+      <div class="shrink-0">
+        <button 
+          id="detailViewBtn" 
+          type="button"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 px-4 py-2 rounded-md bg-accent-blue text-white text-xs font-semibold hover:bg-accent-blueHover shadow-xs transition-all"
+        >
+          <i data-lucide="file-text" class="w-4 h-4"></i> View Certificate
+        </button>
+      </div>
+    </div>
+
+    <p id="detailDescription" class="text-xs sm:text-sm text-typography-secondary leading-relaxed">
+      Select any certificate from the marquee carousel below to inspect its syllabus description, issuing authority, and credential verification details.
+    </p>
+  </div>
+
+  <div class="relative w-full overflow-hidden marquee-mask py-1">
+    <div 
+      id="cert-carousel-viewport" 
+      class="w-full overflow-hidden cursor-grab active:cursor-grabbing select-none"
+    >
+      <div id="cert-carousel-track" class="flex gap-4 w-max will-change-transform">
+        </div>
+    </div>
+  </div>
+</section>
