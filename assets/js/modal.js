@@ -1,107 +1,59 @@
 /**
- * Modal System
+ * Modal Handling Module
  */
 
-function openModal(id) {
-  const modal = document.getElementById(id);
+function openModal(modalId) {
+  const modal = document.getElementById(modalId);
   if (modal) {
     modal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
+    document.body.classList.add('overflow-hidden');
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
   }
 }
 
-function closeModal(id) {
-  const modal = document.getElementById(id);
+function closeModal(modalId) {
+  const modal = document.getElementById(modalId);
   if (modal) {
     modal.classList.add('hidden');
-    document.body.style.overflow = 'auto';
+    document.body.classList.remove('overflow-hidden');
   }
 }
 
-/**
- * Certificate Viewer Modal
- * Called ONLY when "View Certificate" is explicitly clicked.
- */
-function openCertificateViewer(certId) {
-  if (typeof CERTIFICATES_DATA === 'undefined') return;
-
-  const cert = CERTIFICATES_DATA.find((c) => c.id === certId);
-  if (!cert) return;
-
-  // Pause carousel immediately without losing position
-  if (window.CertMarqueeEngine) {
-    window.CertMarqueeEngine.setModalActive(true);
+// Global Event Delegation (works seamlessly with dynamically injected HTML sections)
+document.addEventListener('click', (event) => {
+  // 1. Open button click
+  const openBtn = event.target.closest('[data-modal-target]');
+  if (openBtn) {
+    event.preventDefault();
+    const modalId = openBtn.getAttribute('data-modal-target');
+    openModal(modalId);
+    return;
   }
 
-  // Populate modal data
-  document.getElementById('modalCertTitle').textContent = cert.title;
-  document.getElementById('modalCertIssuer').textContent = cert.issuer;
-  document.getElementById('modalCertDate').textContent = cert.date;
-
-  const pdfObject = document.getElementById('modalPdfObject');
-  const pdfFrame = document.getElementById('modalPdfFrame');
-  const fallbackLink = document.getElementById('modalFallbackLink');
-  const externalBtn = document.getElementById('modalExternalBtn');
-  const verifyBtn = document.getElementById('modalVerifyBtn');
-
-  if (pdfObject) pdfObject.data = cert.file;
-  if (pdfFrame) pdfFrame.src = cert.file;
-  if (fallbackLink) fallbackLink.href = cert.file;
-  if (externalBtn) externalBtn.href = cert.file;
-
-  if (cert.verifyUrl && cert.verifyUrl.trim() !== '') {
-    verifyBtn.href = cert.verifyUrl;
-    verifyBtn.classList.remove('hidden');
-  } else {
-    verifyBtn.classList.add('hidden');
+  // 2. Close button click
+  const closeBtn = event.target.closest('[data-modal-close]');
+  if (closeBtn) {
+    event.preventDefault();
+    const modalId = closeBtn.getAttribute('data-modal-close');
+    closeModal(modalId);
+    return;
   }
 
-  const certModal = document.getElementById('certificateViewerModal');
-  if (certModal) {
-    certModal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
-  }
-
-  if (window.lucide) lucide.createIcons();
-}
-
-function closeCertificateModal() {
-  const certModal = document.getElementById('certificateViewerModal');
-  if (certModal) {
-    certModal.classList.add('hidden');
-    document.body.style.overflow = 'auto';
-
-    const pdfObject = document.getElementById('modalPdfObject');
-    const pdfFrame = document.getElementById('modalPdfFrame');
-    if (pdfObject) pdfObject.data = '';
-    if (pdfFrame) pdfFrame.src = '';
-  }
-
-  // Resume auto-marquee immediately from current position
-  if (window.CertMarqueeEngine) {
-    window.CertMarqueeEngine.setModalActive(false);
-  }
-}
-
-// Global modal background dismiss listener
-window.addEventListener('click', (e) => {
-  if (e.target.id === 'certificateViewerModal') {
-    closeCertificateModal();
-  } else if (e.target.classList.contains('backdrop-blur-sm') || e.target.classList.contains('backdrop-blur-xs')) {
-    e.target.classList.add('hidden');
-    document.body.style.overflow = 'auto';
+  // 3. Click outside modal box (backdrop overlay)
+  if (event.target.classList.contains('fixed') && !event.target.classList.contains('hidden') && event.target.id) {
+    closeModal(event.target.id);
   }
 });
 
-// Escape key listener
-window.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closeCertificateModal();
-    const openModals = document.querySelectorAll('[id$="Modal"]');
-    openModals.forEach((modal) => {
-      if (!modal.classList.contains('hidden')) {
-        modal.classList.add('hidden');
-        document.body.style.overflow = 'auto';
+// Close active modal on Escape key press
+window.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape') {
+    const visibleModals = document.querySelectorAll('.fixed:not(.hidden)');
+    visibleModals.forEach((modal) => {
+      if (modal.id) {
+        closeModal(modal.id);
       }
     });
   }
