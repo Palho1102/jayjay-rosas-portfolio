@@ -6,19 +6,20 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <!-- Direct Channels Card -->
     <div class="bg-white p-5 rounded-lg border border-surface-border shadow-card space-y-3 text-xs">
       <h3 class="font-bold text-typography-primary text-sm">Direct Channels</h3>
       
       <div class="space-y-2">
-        <a href="mailto:jayjayrosas02@gmail.com" class="flex items-center gap-2 text-typography-secondary hover:text-accent-blue">
+        <a href="mailto:jayjayrosas02@gmail.com" class="flex items-center gap-2 text-typography-secondary hover:text-accent-blue transition-colors">
           <i data-lucide="mail" class="w-4 h-4 text-accent-blue"></i>
           <span>jayjayrosas02@gmail.com</span>
         </a>
-        <a href="https://github.com/Palho1102" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-typography-secondary hover:text-accent-blue">
+        <a href="https://github.com/Palho1102" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-typography-secondary hover:text-accent-blue transition-colors">
           <i data-lucide="github" class="w-4 h-4 text-typography-primary"></i>
           <span>github.com/Palho1102</span>
         </a>
-        <a href="https://www.linkedin.com/in/jayjay-rosas-57a258429" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-typography-secondary hover:text-accent-blue">
+        <a href="https://www.linkedin.com/in/jayjay-rosas-57a258429" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-typography-secondary hover:text-accent-blue transition-colors">
           <i data-lucide="linkedin" class="w-4 h-4 text-accent-blue"></i>
           <span>linkedin.com/in/jayjayrosas</span>
         </a>
@@ -29,30 +30,66 @@
       </div>
     </div>
 
+    <!-- Active Submission Form -->
     <div class="md:col-span-2 bg-white p-5 rounded-lg border border-surface-border shadow-card">
-      <form id="contactForm" class="space-y-3" onsubmit="handleContactSubmit(event)">
+      <form id="contactForm" class="space-y-3" onsubmit="handleContactSubmit(event)" novalidate>
+        <!-- Anti-Spam Honeypot Field (Invisible to human users) -->
+        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="hidden" style="display:none !important;" aria-hidden="true">
+
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label for="name" class="block text-xs font-mono uppercase text-typography-muted mb-1">Name</label>
-            <input type="text" id="name" name="name" required placeholder="Juan Dela Cruz" class="w-full bg-surface-main border border-surface-border rounded px-3 py-2 text-xs text-typography-primary focus:border-accent-blue focus:outline-none">
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              required 
+              autocomplete="name"
+              placeholder="Juan Dela Cruz" 
+              class="w-full bg-surface-main border border-surface-border rounded px-3 py-2 text-xs text-typography-primary focus:border-accent-blue focus:outline-none transition-colors"
+            >
           </div>
           <div>
             <label for="email" class="block text-xs font-mono uppercase text-typography-muted mb-1">Email</label>
-            <input type="email" id="email" name="email" required placeholder="juan.dela.cruz@example.com" class="w-full bg-surface-main border border-surface-border rounded px-3 py-2 text-xs text-typography-primary focus:border-accent-blue focus:outline-none">
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              required 
+              autocomplete="email"
+              placeholder="juan.dela.cruz@example.com" 
+              class="w-full bg-surface-main border border-surface-border rounded px-3 py-2 text-xs text-typography-primary focus:border-accent-blue focus:outline-none transition-colors"
+            >
           </div>
         </div>
 
         <div>
           <label for="message" class="block text-xs font-mono uppercase text-typography-muted mb-1">Message</label>
-          <textarea id="message" name="message" rows="3" required placeholder="Enter your inquiry or opportunity details..." class="w-full bg-surface-main border border-surface-border rounded px-3 py-2 text-xs text-typography-primary focus:border-accent-blue focus:outline-none resize-none"></textarea>
+          <textarea 
+            id="message" 
+            name="message" 
+            rows="4" 
+            required 
+            placeholder="Enter your inquiry or opportunity details..." 
+            class="w-full bg-surface-main border border-surface-border rounded px-3 py-2 text-xs text-typography-primary focus:border-accent-blue focus:outline-none resize-none transition-colors"
+          ></textarea>
         </div>
 
-        <button type="submit" id="submitBtn" class="px-4 py-2 rounded bg-accent-blue text-white text-xs font-semibold hover:bg-accent-blueHover flex items-center gap-1.5">
+        <button 
+          type="submit" 
+          id="submitBtn" 
+          class="px-4 py-2 rounded bg-accent-blue text-white text-xs font-semibold hover:bg-accent-blueHover flex items-center gap-1.5 transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+        >
           <i data-lucide="send" class="w-3.5 h-3.5"></i> Send Message
         </button>
 
-        <div id="formSuccess" class="hidden p-2 rounded bg-accent-blueBg border border-blue-200 text-accent-blue text-xs text-center font-mono">
-          Message prepared successfully.
+        <!-- Response Feedback Banners -->
+        <div id="formSuccess" class="hidden p-3 rounded bg-accent-blueBg border border-blue-200 text-accent-blue text-xs text-center font-mono">
+          ✓ Your message has been sent successfully to Jayjay Rosas.
+        </div>
+
+        <div id="formError" class="hidden p-3 rounded bg-red-50 border border-red-200 text-red-600 text-xs text-center font-mono">
+          ✕ Failed to send message. Please try again or email directly via jayjayrosas02@gmail.com.
         </div>
       </form>
     </div>

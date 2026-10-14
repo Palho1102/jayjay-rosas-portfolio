@@ -467,28 +467,110 @@ function initStickyNavbar() {
 /**
  * Contact Form Handler
  */
-function handleContactSubmit(e) {
+/**
+ * Production Contact Form Handler with Real Email Delivery
+ */
+const CONTACT_ENDPOINT = 'https://formspree.io/f/xbgdzbwl';
+// const CONTACT_ENDPOINT = 'https://formspree.io/f/xvgkznqy'; // Formspree endpoint configured for jayjayrosas02@gmail.com
+
+async function handleContactSubmit(e) {
   e.preventDefault();
+
+  const form = document.getElementById('contactForm');
   const submitBtn = document.getElementById('submitBtn');
   const successNotice = document.getElementById('formSuccess');
+  const errorNotice = document.getElementById('formError');
 
-  if (!submitBtn || !successNotice) return;
+  if (!form || !submitBtn || !successNotice || !errorNotice) return;
 
+  // Reset notices
+  successNotice.classList.add('hidden');
+  errorNotice.classList.add('hidden');
+
+  const nameInput = document.getElementById('name');
+  const emailInput = document.getElementById('email');
+  const messageInput = document.getElementById('message');
+  const honeypot = form.querySelector('input[name="_gotcha"]');
+
+  // Anti-Spam: silently discard bot submissions
+  if (honeypot && honeypot.value.trim() !== '') {
+    form.reset();
+    return;
+  }
+
+  const nameVal = nameInput ? nameInput.value.trim() : '';
+  const emailVal = emailInput ? emailInput.value.trim() : '';
+  const messageVal = messageInput ? messageInput.value.trim() : '';
+
+  // 1. Validation: Required fields
+  if (!nameVal || !emailVal || !messageVal) {
+    errorNotice.textContent = 'Please fill out all required fields (Name, Email, and Message).';
+    errorNotice.classList.remove('hidden');
+    return;
+  }
+
+  // 2. Validation: Email format
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailPattern.test(emailVal)) {
+    errorNotice.textContent = 'Please enter a valid email address so I can reply back.';
+    errorNotice.classList.remove('hidden');
+    if (emailInput) emailInput.focus();
+    return;
+  }
+
+  // 3. Prevent duplicate submissions & set loading state
   submitBtn.disabled = true;
-  submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Sending...';
+  submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-3.5 h-3.5 animate-spin"></i> Sending Message...';
   if (window.lucide) lucide.createIcons();
 
-  setTimeout(() => {
-    submitBtn.disabled = false;
-    submitBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> Message Sent';
-    if (window.lucide) lucide.createIcons();
-    successNotice.classList.remove('hidden');
-    document.getElementById('contactForm').reset();
+  const payload = {
+    name: nameVal,
+    email: emailVal,
+    _replyto: emailVal,
+    message: messageVal,
+    _subject: `New Portfolio Contact Message from ${nameVal}`,
+    submittedAt: new Date().toLocaleString()
+  };
 
-    setTimeout(() => {
-      submitBtn.innerHTML = '<i data-lucide="send" class="w-3.5 h-3.5"></i> Send Message';
+  try {
+    const response = await fetch(CONTACT_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (response.ok) {
+      // Success feedback
+      submitBtn.innerHTML = '<i data-lucide="check" class="w-3.5 h-3.5"></i> Message Sent!';
       if (window.lucide) lucide.createIcons();
-      successNotice.classList.add('hidden');
-    }, 4000);
-  }, 800);
+      successNotice.textContent = '✓ Thank you! Your message has been delivered to jayjayrosas02@gmail.com.';
+      successNotice.classList.remove('hidden');
+
+      // Clear fields only upon confirmed delivery
+      form.reset();
+
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i data-lucide="send" class="w-3.5 h-3.5"></i> Send Message';
+        if (window.lucide) lucide.createIcons();
+      }, 3000);
+    } else {
+      const data = await response.json().catch(() => ({}));
+      const errorMsg = (data.errors && data.errors.map(err => err.message).join(', ')) || 
+                       'Service temporarily unavailable. Please email directly at jayjayrosas02@gmail.com.';
+      throw new Error(errorMsg);
+    }
+  } catch (err) {
+    console.error('Contact Form Submission Error:', err);
+    errorNotice.textContent = `✕ ${err.message || 'Network error occurred. Please email directly at jayjayrosas02@gmail.com.'}`;
+    errorNotice.classList.remove('hidden');
+
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<i data-lucide="send" class="w-3.5 h-3.5"></i> Send Message';
+    if (window.lucide) lucide.createIcons();
+  }
 }
+
