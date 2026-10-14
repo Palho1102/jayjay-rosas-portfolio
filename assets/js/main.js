@@ -52,11 +52,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 /**
  * =========================================================================
  * FLUID LERP-DRIVEN MARQUEE & MANUAL INTERACTION ENGINE
- * - Exponential interpolation (LERP) for wheel input (Zero chop / stutter)
- * - Single RAF loop updating translate3d
- * - Scoped preventDefault() to lock webpage vertical scrolling
- * - Hover does NOT stop auto-scrolling
- * - Snappy settling with zero floating drift
+ * - Automatic right-to-left scrolling
+ * - 3-second pause on card or button click (debounced)
+ * - Immediate open of certificate PDF modal on View clicks
+ * - Wheel and touch interaction support
  * =========================================================================
  */
 function initUnifiedCertifications() {
@@ -120,7 +119,7 @@ function initUnifiedCertifications() {
             type="button"
             data-action="view-modal"
             data-cert-id="${cert.id}"
-            class="px-2 py-1 rounded bg-accent-blueBg border border-blue-200 text-accent-blue font-semibold text-[11px] hover:bg-blue-100 flex items-center gap-1 transition-colors"
+            class="px-2 py-1 rounded bg-accent-blueBg border border-blue-200 text-accent-blue font-semibold text-[11px] hover:bg-blue-100 flex items-center gap-1 transition-colors cursor-pointer"
           >
             View <i data-lucide="arrow-up-right" class="w-3 h-3"></i>
           </button>
@@ -129,41 +128,46 @@ function initUnifiedCertifications() {
     `;
   };
 
-  // Render 3 duplicate sets for seamless multi-directional wrap
+  // Render 3 duplicate sets for continuous infinite wrap
   const cardsHtml = CERTIFICATES_DATA.map(createCardHtml).join('');
   track.innerHTML = cardsHtml + cardsHtml + cardsHtml;
 
-  // Set default initial selection in the detail panel
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+
+  // Set default selection
   selectCertificate(CERTIFICATES_DATA[0].id);
 
-  // Position & Interpolation State (Single Source of Truth)
+  // Position & Interpolation State
   let currentX = 0;
   let targetX = 0;
   let singleSetWidth = 0;
   
-  // Interaction flags
+  // Interaction and pause flags
   let isWheelActive = false;
   let isPointerDown = false;
   let isModalOpen = false;
+  let isPausedForDelay = false;
   let hasDragged = false;
   
   let startPointerX = 0;
   let startTargetX = 0;
   let wheelReleaseTimer = null;
   let pointerReleaseTimer = null;
+  let pauseTimer = null;
 
-  const autoSpeed = 0.75;      // Pixel translation per frame in auto mode
-  const lerpFactor = 0.16;     // Responsive smoothing factor (High responsiveness, zero choppy steps)
+  const autoSpeed = 0.75;
+  const lerpFactor = 0.16;
 
   function updateMeasurements() {
     singleSetWidth = track.scrollWidth / 3;
     if (currentX === 0 && singleSetWidth > 0) {
-      currentX = -singleSetWidth; // Center on middle duplicate
+      currentX = -singleSetWidth;
       targetX = currentX;
     }
   }
 
-  // Unified Infinite Wrap Boundary Helper
   function wrapBounds() {
     if (singleSetWidth <= 0) return;
     if (Math.abs(targetX) >= singleSetWidth * 2) {
@@ -178,23 +182,21 @@ function initUnifiedCertifications() {
   // Master Render Loop
   function render() {
     const isManualActive = isWheelActive || isPointerDown;
+    const isStationary = isModalOpen || isPausedForDelay;
 
-    if (!isManualActive && !isModalOpen) {
-      // Auto-marquee: steadily increment target position
+    if (!isManualActive && !isStationary) {
       targetX -= autoSpeed;
       currentX = targetX;
       wrapBounds();
     } else if (isWheelActive) {
-      // Smooth interpolation towards targetX for wheel input
       const diff = targetX - currentX;
       if (Math.abs(diff) > 0.1) {
         currentX += diff * lerpFactor;
       } else {
-        currentX = targetX; // Snap tightly to eliminate lingering float
+        currentX = targetX;
       }
       wrapBounds();
     } else if (isPointerDown) {
-      // Immediate 1:1 follow during drag/touch
       currentX = targetX;
       wrapBounds();
     }
@@ -203,7 +205,22 @@ function initUnifiedCertifications() {
     requestAnimationFrame(render);
   }
 
-  // External hooks for modal and navigation buttons
+  // 3-second marquee pause controller
+  function pauseMarquee(durationMs = 3000) {
+    isPausedForDelay = true;
+    targetX = currentX;
+
+    if (pauseTimer) {
+      clearTimeout(pauseTimer);
+    }
+
+    pauseTimer = setTimeout(() => {
+      isPausedForDelay = false;
+      targetX = currentX; // Synchronize target upon resuming
+    }, durationMs);
+  }
+
+  // External controller hooks
   window.CertMarqueeEngine = {
     setModalActive: (open) => {
       isModalOpen = open;
@@ -213,6 +230,7 @@ function initUnifiedCertifications() {
     },
     step: (direction) => {
       isWheelActive = true;
+      pauseMarquee(3000);
       const stepDist = 320;
       targetX += direction === 'left' ? stepDist : -stepDist;
       
@@ -221,44 +239,35 @@ function initUnifiedCertifications() {
         isWheelActive = false;
         targetX = currentX;
       }, 250);
-    }
+    },
+    pause: pauseMarquee
   };
 
-  // --- MOUSE WHEEL INTERPOLATION CONTROLLER ---
+  // --- MOUSE WHEEL ---
   viewport.addEventListener('wheel', (e) => {
-    // 1. Fully lock webpage vertical scrolling
     e.preventDefault();
     e.stopPropagation();
 
-    // 2. Activate wheel manual mode immediately
     isWheelActive = true;
-
-    // 3. Normalize delta values across conventional mice and precision trackpads
     let delta = 0;
     if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
       delta = e.deltaX;
     } else {
-      // Normalize Firefox DOM_DELTA_LINE mode if applicable
       const lineMultiplier = e.deltaMode === 1 ? 24 : 1;
       delta = e.deltaY * lineMultiplier;
     }
 
-    // Clamp delta spikes to prevent jarring leaps from flicked free-spinning wheels
     const clampedDelta = Math.max(Math.min(delta, 120), -120);
-
-    // 4. Update target position smoothly
-    // Positive delta (scroll down) advances carousel RIGHT-to-LEFT (-X)
     targetX -= clampedDelta * 1.1;
 
-    // 5. Short debounce to immediately resume auto mode without lingering momentum
     if (wheelReleaseTimer) clearTimeout(wheelReleaseTimer);
     wheelReleaseTimer = setTimeout(() => {
       isWheelActive = false;
-      targetX = currentX; // Synchronize target to eliminate snapping on auto resume
+      targetX = currentX;
     }, 180);
   }, { passive: false });
 
-  // --- MOUSE DRAG CONTROLLER (1:1 Direct Follow) ---
+  // --- MOUSE DRAG ---
   viewport.addEventListener('mousedown', (e) => {
     isPointerDown = true;
     hasDragged = false;
@@ -289,7 +298,7 @@ function initUnifiedCertifications() {
     }
   });
 
-  // --- TOUCH SWIPE CONTROLLER (Mobile / Tablet) ---
+  // --- TOUCH EVENTS ---
   viewport.addEventListener('touchstart', (e) => {
     isPointerDown = true;
     hasDragged = false;
@@ -320,7 +329,7 @@ function initUnifiedCertifications() {
     }
   });
 
-  // --- CLICK ROUTING ---
+  // --- CLICK ROUTING & DELEGATION ---
   track.addEventListener('click', (e) => {
     if (hasDragged) {
       e.preventDefault();
@@ -328,26 +337,34 @@ function initUnifiedCertifications() {
       return;
     }
 
+    // 1. Click on card's "View" button
     const viewBtn = e.target.closest('[data-action="view-modal"]');
     if (viewBtn) {
+      e.preventDefault();
       e.stopPropagation();
       const certId = viewBtn.getAttribute('data-cert-id');
+
+      // Pause marquee for 3 seconds immediately without blocking modal
+      pauseMarquee(3000);
+
       if (certId && typeof openCertificateViewer === 'function') {
+        selectCertificate(certId);
         openCertificateViewer(certId);
       }
       return;
     }
 
+    // 2. Click on card itself (selects certificate and pauses marquee for 2 seconds)
     const card = e.target.closest('.cert-card');
     if (card) {
       const certId = card.getAttribute('data-cert-id');
       if (certId) {
+        pauseMarquee(2000);
         selectCertificate(certId);
       }
     }
   });
 
-  // Kickstart animation loop
   requestAnimationFrame(() => {
     updateMeasurements();
     render();
@@ -356,7 +373,6 @@ function initUnifiedCertifications() {
 
 /**
  * Select a certificate to showcase in the details inspector panel
- * (Does NOT open the document modal)
  */
 function selectCertificate(certId) {
   if (typeof CERTIFICATES_DATA === 'undefined') return;
@@ -377,21 +393,25 @@ function selectCertificate(certId) {
   if (categoryEl) categoryEl.textContent = cert.category;
   if (descEl) descEl.textContent = cert.description;
 
-  // Bind the dedicated "View Certificate" button inside the details panel
+  // Bind the featured View Certificate button
   if (viewBtn) {
-    viewBtn.onclick = () => {
+    viewBtn.onclick = (e) => {
+      e.preventDefault();
+      if (window.CertMarqueeEngine && typeof window.CertMarqueeEngine.pause === 'function') {
+        window.CertMarqueeEngine.pause(3000);
+      }
       if (typeof openCertificateViewer === 'function') {
         openCertificateViewer(cert.id);
       }
     };
   }
 
-  // Highlight all matching clones in the track
+  // Update card active highlights across marquee copies
   document.querySelectorAll('.cert-card').forEach((card) => {
     if (card.getAttribute('data-cert-id') === cert.id) {
-      card.classList.add('is-active');
+      card.classList.add('border-accent-blue', 'ring-1', 'ring-blue-300');
     } else {
-      card.classList.remove('is-active');
+      card.classList.remove('border-accent-blue', 'ring-1', 'ring-blue-300');
     }
   });
 }
