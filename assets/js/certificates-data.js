@@ -103,7 +103,7 @@ const CERTIFICATES_DATA = [
   },
   {
     id: "it-internship-ojt",
-    title: "IT Internship / On-the-Job Training Documentation",
+    title: "IT Internship / On-the-Job Training",
     issuer: "Emergence Systems & Solutions",
     date: "May 28, 2026",
     category: "Internship",
