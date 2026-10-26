@@ -9,7 +9,7 @@ const CERTIFICATES_DATA = [
     date: "July 2026",
     category: "Cybersecurity",
     accent: "blue",
-    file: "assets/documents/certificates/foundations-of-cybersecurity.pdf",
+    file: "assets/documents/certificates/foundations-of-cybersecurity-blurred.pdf",
     verifyUrl: "https://coursera.org/verify/1RWMBBJIEIAS",
     description: "Core concepts of information security, security frameworks (NIST, CIS), security ethics, and foundational defense."
   },
@@ -20,7 +20,7 @@ const CERTIFICATES_DATA = [
     date: "July 27, 2026",
     category: "Risk Management",
     accent: "blue",
-    file: "assets/documents/certificates/play-it-safe-manage-security-risks.pdf",
+    file: "assets/documents/certificates/play-it-safe-manage-security-risks-blurred.pdf",
     verifyUrl: "https://coursera.org/verify/NE7WFO3LZX1N",
     description: "Identifying security risks, utilizing the 8-step risk management framework, and implementing internal controls."
   },
@@ -31,7 +31,7 @@ const CERTIFICATES_DATA = [
     date: "July 29, 2026",
     category: "Network Defense",
     accent: "indigo",
-    file: "assets/documents/certificates/connect-and-protect-networks.pdf",
+    file: "assets/documents/certificates/connect-and-protect-networks-blurred.pdf",
     verifyUrl: "https://coursera.org/verify/3GZN26YXHFT5",
     description: "Transmission Control Protocol (TCP/IP), OSI architecture, packet inspection, firewalls, and network intrusion defense."
   },
@@ -42,7 +42,7 @@ const CERTIFICATES_DATA = [
     date: "August 1, 2026",
     category: "Systems & Data",
     accent: "indigo",
-    file: "assets/documents/certificates/tools-of-the-trade-linux-sql.pdf",
+    file: "assets/documents/certificates/tools-of-the-trade-linux-sql-blurred.pdf",
     verifyUrl: "https://coursera.org/verify/BYBQ2VH5KNPZ",
     description: "Command-line administration using Linux Bash and executing SQL queries to filter, retrieve, and analyze relational security logs."
   },
@@ -53,7 +53,7 @@ const CERTIFICATES_DATA = [
     date: "August 4, 2026",
     category: "Threat Analysis",
     accent: "violet",
-    file: "assets/documents/certificates/assets-threats-vulnerabilities.pdf",
+    file: "assets/documents/certificates/assets-threats-vulnerabilities-blurred.pdf",
     verifyUrl: "https://coursera.org/verify/ZYKQ2T4OLWVP",
     description: "Classifying organizational digital assets, assessing threat vectors, and mitigating system vulnerabilities."
   },
@@ -64,7 +64,7 @@ const CERTIFICATES_DATA = [
     date: "August 7, 2026",
     category: "Detection & SOC",
     accent: "violet",
-    file: "assets/documents/certificates/sound-the-alarm-detection-response.pdf",
+    file: "assets/documents/certificates/sound-the-alarm-detection-response-blurred.pdf",
     verifyUrl: "https://coursera.org/verify/XXAWNAYXYONM",
     description: "Incident lifecycle management, security monitoring, alert triage, and analyzing signatures with intrusion detection systems."
   },
@@ -75,7 +75,7 @@ const CERTIFICATES_DATA = [
     date: "August 10, 2026",
     category: "Automation",
     accent: "blue",
-    file: "assets/documents/certificates/automate-cybersecurity-tasks-with-python.pdf",
+    file: "assets/documents/certificates/automate-cybersecurity-tasks-with-python-blurred.pdf",
     verifyUrl: "https://coursera.org/verify/MTRTDHX72YQC",
     description: "Using Python scripts, string parsing, conditional logic, and regular expressions to automate repetitive security inspection tasks."
   },
@@ -86,7 +86,7 @@ const CERTIFICATES_DATA = [
     date: "August 13, 2026",
     category: "Professional Practice",
     accent: "indigo",
-    file: "assets/documents/certificates/put-it-to-work-cybersecurity-jobs.pdf",
+    file: "assets/documents/certificates/put-it-to-work-cybersecurity-jobs-blurred.pdf",
     verifyUrl: "https://coursera.org/verify/TTW5DY656LUR",
     description: "Escalation protocols, technical stakeholder communications, post-incident reviews, and security operations center (SOC) preparedness."
   },
@@ -97,7 +97,7 @@ const CERTIFICATES_DATA = [
     date: "August 16, 2026",
     category: "Productivity",
     accent: "violet",
-    file: "assets/documents/certificates/accelerate-your-job-search-with-ai.pdf",
+    file: "assets/documents/certificates/accelerate-your-job-search-with-ai-blurred.pdf",
     verifyUrl: "https://coursera.org/verify/H3RS137MTC9L",
     description: "Leveraging applied artificial intelligence tooling to optimize technical portfolios, workflows, and professional communication."
   },
